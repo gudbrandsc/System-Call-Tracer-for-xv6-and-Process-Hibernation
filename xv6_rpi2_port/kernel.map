@@ -1,0 +1,799 @@
+
+Allocating common symbols
+Common symbol       size              file
+
+uart_lock           0x4               build/uart_pl011.o
+log                 0x70              build/log.o
+kmem                0x3c              build/kalloc.o
+bcache              0x173c            build/bio.o
+input               0xc0              build/console.o
+kpgdir              0x4               build/vm.o
+mb_data             0x28              build/main.o
+tickslock           0x34              build/trap.o
+ftable              0x994             build/file.o
+cpus                0xe0              build/console.o
+mailbuffer          0x4               build/mailbox.o
+pm_size             0x4               build/mmu.o
+ticks               0x4               build/trap.o
+ptable              0x2034            build/proc.o
+devsw               0x50              build/file.o
+icache              0xfd4             build/fs.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+LOAD build/entry.o
+LOAD build/exception.o
+LOAD build/bio.o
+LOAD build/console.o
+LOAD build/exec.o
+LOAD build/file.o
+LOAD build/fs.o
+LOAD build/kalloc.o
+LOAD build/log.o
+LOAD build/mailbox.o
+LOAD build/main.o
+LOAD build/memide.o
+LOAD build/mmu.o
+LOAD build/pipe.o
+LOAD build/proc.o
+LOAD build/spinlock.o
+LOAD build/string.o
+LOAD build/syscall.o
+LOAD build/sysfile.o
+LOAD build/sysproc.o
+LOAD build/timer.o
+LOAD build/trap.o
+LOAD build/uart.o
+LOAD build/uart_pl011.o
+LOAD build/vm.o
+                0x0000000000000000                PHYSTART = 0x0
+                0x0000000010000000                PHYSIZE = 0x10000000
+                0x0000000080000000                KERNBASE = 0x80000000
+                0x000000003f000000                MMIO_PA = 0x3f000000
+                0x00000000d0000000                MMIO_VA = 0xd0000000
+                0x0000000001000000                MMIO_SIZE = 0x1000000
+                0x00000000df000000                PERIPHBASE = 0xdf000000
+                0x0000000000004000                K_PDX_BASE = 0x4000
+                0x0000000000003000                K_PTX_BASE = 0x3000
+                0x0000000000008000                PHYSOFFSET = 0x8000
+                0x0000000080008000                KERNOFFSET = 0x80008000
+                0x0000000080008000                PHYSOFFSET = DEFINED (PHYSOFFSET)?PHYSOFFSET:0x80008000
+                0x00000000c0008000                KERNOFFSET = DEFINED (KERNOFFSET)?KERNOFFSET:0xc0008000
+                0x0000000080000000                SHIFT = (KERNOFFSET - PHYSOFFSET)
+
+.init           0x0000000000008000      0x1d4
+ *(.init)
+ .init          0x0000000000008000      0x1d4 build/entry.o
+                0x0000000000008000                _start
+                0x0000000000008200                . = ALIGN (0x100)
+                0x0000000000008200                INIT_END = .
+                0x0000000080008200                . = (. + SHIFT)
+
+.text           0x0000000080008200     0x6200 load address 0x0000000000008200
+ *.c.o(.text)
+ *(.text .stub .text.*)
+ .text          0x0000000080008200       0x94 build/entry.o
+                0x0000000080008200                _pagingstart
+                0x0000000080008208                acknowledge
+                0x000000008000822c                dsb_barrier
+                0x0000000080008238                flush_dcache_all
+                0x0000000080008244                flush_idcache
+                0x0000000080008250                flush_tlb
+                0x0000000080008270                flush_dcache
+                0x000000008000827c                set_pgtbase
+                0x0000000080008284                getsystemtime
+ *fill*         0x0000000080008294        0xc 
+ .text          0x00000000800082a0      0x284 build/exception.o
+                0x00000000800082a0                vectors
+                0x0000000080008338                trapret
+                0x0000000080008478                set_mode_sp
+                0x000000008000849c                readcpsr
+                0x00000000800084a4                cli
+                0x00000000800084b4                sti
+                0x00000000800084c4                swtch
+ .text          0x0000000080008524      0x238 build/bio.o
+                0x0000000080008524                binit
+                0x00000000800085ac                bread
+                0x00000000800086ac                bwrite
+                0x00000000800086d4                brelse
+ .text          0x000000008000875c      0xae8 build/console.o
+                0x000000008000875c                consoleread
+                0x00000000800088f4                setgpucolour
+                0x0000000080008904                initframebuf
+                0x000000008000895c                drawpixel
+                0x000000008000899c                drawcursor
+                0x0000000080008a08                drawcharacter
+                0x0000000080008a14                gpuputc
+                0x0000000080008c14                consolewrite
+                0x0000000080008d20                panic
+                0x0000000080008d94                cprintf
+                0x0000000080008f34                consputc
+                0x0000000080008fd0                consoleintr
+                0x0000000080009154                gpuinit
+                0x00000000800091b0                consoleinit
+ .text          0x0000000080009244      0x2c4 build/exec.o
+                0x0000000080009244                exec
+ .text          0x0000000080009508      0x34c build/file.o
+                0x0000000080009508                fileinit
+                0x0000000080009538                filealloc
+                0x00000000800095a4                filedup
+                0x00000000800095ec                fileclose
+                0x000000008000968c                filestat
+                0x00000000800096d0                fileread
+                0x000000008000975c                filewrite
+ .text          0x0000000080009854      0xd5c build/fs.o
+                0x000000008000992c                readsb
+                0x0000000080009b90                iinit
+                0x0000000080009bc0                ialloc
+                0x0000000080009c70                iupdate
+                0x0000000080009cec                idup
+                0x0000000080009d20                ilock
+                0x0000000080009e28                iunlock
+                0x0000000080009e88                iput
+                0x0000000080009fd0                iunlockput
+                0x0000000080009fe8                stati
+                0x000000008000a010                readi
+                0x000000008000a0fc                writei
+                0x000000008000a21c                namecmp
+                0x000000008000a224                dirlookup
+                0x000000008000a4b0                dirlink
+                0x000000008000a588                namei
+                0x000000008000a5a4                nameiparent
+ .text          0x000000008000a5b0      0x23c build/kalloc.o
+                0x000000008000a5b0                kfree
+                0x000000008000a650                freerange
+                0x000000008000a68c                kinit1
+                0x000000008000a700                kinit2
+                0x000000008000a74c                kalloc
+                0x000000008000a7b8                kmemfree
+ .text          0x000000008000a7ec      0x338 build/log.o
+                0x000000008000a8d4                initlog
+                0x000000008000a97c                begin_trans
+                0x000000008000a9d4                commit_trans
+                0x000000008000aa30                log_write
+ .text          0x000000008000ab24      0x120 build/mailbox.o
+                0x000000008000ab24                create_request
+                0x000000008000abb8                mailboxinit
+                0x000000008000abd0                readmailbox
+                0x000000008000ac08                writemailbox
+ .text          0x000000008000ac44      0x244 build/main.o
+                0x000000008000ac44                OkLoop
+                0x000000008000ac88                NotOkLoop
+                0x000000008000accc                getpmsize
+                0x000000008000ad40                machinit
+                0x000000008000ad54                cmain
+ .text          0x000000008000ae88       0xe8 build/memide.o
+                0x000000008000ae88                ideinit
+                0x000000008000aebc                ideintr
+                0x000000008000aec0                iderw
+ .text          0x000000008000af70      0x108 build/mmu.o
+                0x000000008000af70                mmuinit0
+                0x000000008000b014                mmuinit1
+ .text          0x000000008000b078      0x320 build/pipe.o
+                0x000000008000b078                pipealloc
+                0x000000008000b15c                pipeclose
+                0x000000008000b1bc                pipewrite
+                0x000000008000b294                piperead
+ .text          0x000000008000b398      0x890 build/proc.o
+                0x000000008000b484                forkret
+                0x000000008000b4b8                pinit
+                0x000000008000b4e8                userinit
+                0x000000008000b598                growproc
+                0x000000008000b600                fork
+                0x000000008000b6e8                scheduler
+                0x000000008000b79c                sched
+                0x000000008000b830                exit
+                0x000000008000b970                yield
+                0x000000008000b9a8                sleep
+                0x000000008000ba5c                wait
+                0x000000008000bb34                wakeup
+                0x000000008000bb8c                kill
+                0x000000008000bc08                procdump
+                0x000000008000bc0c                trace
+ .text          0x000000008000bc28      0x194 build/spinlock.o
+                0x000000008000bc28                initlock
+                0x000000008000bc3c                getcallerpcs
+                0x000000008000bc40                holding
+                0x000000008000bc68                pushcli
+                0x000000008000bca0                acquire
+                0x000000008000bd1c                popcli
+                0x000000008000bd78                release
+ .text          0x000000008000bdbc      0x2c4 build/string.o
+                0x000000008000bdbc                memsetw
+                0x000000008000bde0                memsetb
+                0x000000008000be00                memset
+                0x000000008000be6c                memcmp
+                0x000000008000beb8                memmove
+                0x000000008000bf14                memcpy
+                0x000000008000bf18                strncmp
+                0x000000008000bf78                strncpy
+                0x000000008000bfd4                safestrcpy
+                0x000000008000c014                strlen
+                0x000000008000c044                div
+ .text          0x000000008000c080      0x260 build/syscall.o
+                0x000000008000c080                fetchint
+                0x000000008000c0bc                fetchstr
+                0x000000008000c124                argint
+                0x000000008000c16c                argptr
+                0x000000008000c1cc                argstr
+                0x000000008000c254                syscall
+ .text          0x000000008000c2e0      0xde8 build/sysfile.o
+                0x000000008000c4b0                sys_dup
+                0x000000008000c574                sys_read
+                0x000000008000c638                sys_write
+                0x000000008000c6fc                sys_close
+                0x000000008000c77c                sys_fstat
+                0x000000008000c7f8                sys_link
+                0x000000008000c940                sys_unlink
+                0x000000008000cb38                sys_open
+                0x000000008000cc9c                sys_mkdir
+                0x000000008000cd34                sys_mknod
+                0x000000008000ce20                sys_chdir
+                0x000000008000ced4                sys_exec
+                0x000000008000cfc8                sys_pipe
+ .text          0x000000008000d0c8      0x378 build/sysproc.o
+                0x000000008000d0c8                sys_fork
+                0x000000008000d100                sys_exit
+                0x000000008000d13c                sys_wait
+                0x000000008000d174                sys_kill
+                0x000000008000d1dc                sys_getpid
+                0x000000008000d21c                sys_sbrk
+                0x000000008000d298                sys_sleep
+                0x000000008000d3a0                sys_uptime
+                0x000000008000d3d0                sys_memfree
+                0x000000008000d408                sys_trace
+ .text          0x000000008000d440       0xe0 build/timer.o
+                0x000000008000d440                enabletimer3irq
+                0x000000008000d458                timer3init
+                0x000000008000d4a0                timer3intr
+                0x000000008000d4f4                delay
+ .text          0x000000008000d520      0x43c build/trap.o
+                0x000000008000d520                enable_intrs
+                0x000000008000d544                disable_intrs
+                0x000000008000d568                tvinit
+                0x000000008000d654                trap_oops
+                0x000000008000d6f0                handle_irq
+                0x000000008000d74c                trap
+ .text          0x000000008000d95c      0x220 build/uart.o
+                0x000000008000d9dc                setgpioval
+                0x000000008000da28                setgpiofunc
+                0x000000008000da34                uartputc
+                0x000000008000da88                enableirqminiuart
+                0x000000008000daa0                miniuartintr
+                0x000000008000daac                uartinit
+ .text          0x000000008000db7c       0x94 build/uart_pl011.o
+                0x000000008000db7c                uartinit_fvp
+                0x000000008000dbb0                uartputc_fvp
+                0x000000008000dbf4                uartgetc_fvp
+ .text          0x000000008000dc10      0x7f0 build/vm.o
+                0x000000008000de0c                setupkvm
+                0x000000008000de30                setupkvm_new
+                0x000000008000ded4                kvmalloc
+                0x000000008000deec                switchkvm
+                0x000000008000def0                switchkvm_new
+                0x000000008000df1c                switchuvm
+                0x000000008000df64                inituvm
+                0x000000008000dfdc                loaduvm
+                0x000000008000e0c0                allocuvm
+                0x000000008000e1b4                deallocuvm
+                0x000000008000e1c8                freevm
+                0x000000008000e238                clearpteu
+                0x000000008000e26c                copyuvm
+                0x000000008000e34c                uva2ka
+                0x000000008000e380                copyout
+
+.glue_7         0x000000008000e400        0x0 load address 0x000000000000e400
+ .glue_7        0x000000008000e400        0x0 linker stubs
+
+.glue_7t        0x000000008000e400        0x0 load address 0x000000000000e400
+ .glue_7t       0x000000008000e400        0x0 linker stubs
+
+.vfp11_veneer   0x000000008000e400        0x0 load address 0x000000000000e400
+ .vfp11_veneer  0x000000008000e400        0x0 linker stubs
+
+.v4_bx          0x000000008000e400        0x0 load address 0x000000000000e400
+ .v4_bx         0x000000008000e400        0x0 linker stubs
+
+.iplt           0x000000008000e400        0x0 load address 0x000000000000e400
+ .iplt          0x000000008000e400        0x0 build/entry.o
+
+.rodata         0x000000008000e400      0xa58 load address 0x000000000000e400
+ *(.rodata .rodata.*)
+ .rodata.str1.4
+                0x000000008000e400       0x2b build/bio.o
+ *fill*         0x000000008000e42b        0x1 
+ .rodata        0x000000008000e42c       0x11 build/console.o
+ *fill*         0x000000008000e43d        0x3 
+ .rodata.str1.4
+                0x000000008000e440       0x5e build/console.o
+                                         0x62 (size before relaxing)
+ *fill*         0x000000008000e49e        0x2 
+ .rodata.str1.4
+                0x000000008000e4a0       0x42 build/file.o
+ *fill*         0x000000008000e4e2        0x2 
+ .rodata.str1.4
+                0x000000008000e4e4       0xb9 build/fs.o
+                                         0xc4 (size before relaxing)
+ *fill*         0x000000008000e59d        0x3 
+ .rodata.str1.4
+                0x000000008000e5a0        0xd build/kalloc.o
+ *fill*         0x000000008000e5ad        0x3 
+ .rodata.str1.4
+                0x000000008000e5b0       0x33 build/log.o
+ *fill*         0x000000008000e5e3        0x1 
+ .rodata.str1.4
+                0x000000008000e5e4      0x13b build/main.o
+ *fill*         0x000000008000e71f        0x1 
+ .rodata.str1.4
+                0x000000008000e720       0x67 build/memide.o
+ *fill*         0x000000008000e787        0x1 
+ .rodata.str1.4
+                0x000000008000e788        0x5 build/pipe.o
+ *fill*         0x000000008000e78d        0x3 
+ .rodata.str1.4
+                0x000000008000e790       0xad build/proc.o
+ *fill*         0x000000008000e83d        0x3 
+ .rodata.str1.4
+                0x000000008000e840       0x60 build/spinlock.o
+ .rodata        0x000000008000e8a0       0x60 build/syscall.o
+ .rodata.str1.4
+                0x000000008000e900       0x1c build/syscall.o
+ .rodata.str1.4
+                0x000000008000e91c      0x1c7 build/sysfile.o
+ *fill*         0x000000008000eae3        0x1 
+ .rodata.str1.4
+                0x000000008000eae4       0xa5 build/sysproc.o
+ *fill*         0x000000008000eb89        0x3 
+ .rodata.str1.4
+                0x000000008000eb8c      0x161 build/trap.o
+ *fill*         0x000000008000eced        0x3 
+ .rodata.str1.4
+                0x000000008000ecf0      0x168 build/vm.o
+                                        0x16e (size before relaxing)
+
+.rel.dyn        0x000000008000ee58        0x0 load address 0x000000000000ee58
+ .rel.iplt      0x000000008000ee58        0x0 build/entry.o
+                0x000000008000f000                . = ALIGN (0x1000)
+
+.data           0x000000008000f000    0x808b0 load address 0x000000000000f000
+ *(.data)
+ .data          0x000000008000f000    0x80850 build/entry.o
+                0x000000008000f000                font
+                0x000000008000f800                _binary_initcode_start
+                0x000000008000f850                _binary_fs_img_start
+                0x000000008000f850                _binary_initcode_end
+                0x000000008008f850                _binary_fs_img_end
+ .data          0x000000008008f850        0x0 build/exception.o
+ .data          0x000000008008f850        0x0 build/bio.o
+ .data          0x000000008008f850       0x18 build/console.o
+                0x000000008008f850                framewidth
+                0x000000008008f854                frameheight
+                0x000000008008f85c                fontheight
+                0x000000008008f860                fontwidth
+                0x000000008008f864                framedepth
+ .data          0x000000008008f868        0x0 build/exec.o
+ .data          0x000000008008f868        0x0 build/file.o
+ .data          0x000000008008f868        0x0 build/fs.o
+ .data          0x000000008008f868        0x0 build/kalloc.o
+ .data          0x000000008008f868        0x0 build/log.o
+ .data          0x000000008008f868        0x0 build/mailbox.o
+ .data          0x000000008008f868        0x0 build/main.o
+ .data          0x000000008008f868        0x0 build/memide.o
+ .data          0x000000008008f868        0x0 build/mmu.o
+ .data          0x000000008008f868        0x0 build/pipe.o
+ .data          0x000000008008f868        0xc build/proc.o
+                0x000000008008f868                nextpid
+                0x000000008008f870                first_sched
+ .data          0x000000008008f874        0x0 build/spinlock.o
+ .data          0x000000008008f874        0x0 build/string.o
+ .data          0x000000008008f874        0x0 build/syscall.o
+ .data          0x000000008008f874        0x0 build/sysfile.o
+ .data          0x000000008008f874        0x0 build/sysproc.o
+ .data          0x000000008008f874        0x0 build/timer.o
+ .data          0x000000008008f874        0x0 build/trap.o
+ .data          0x000000008008f874        0x0 build/uart.o
+ .data          0x000000008008f874        0x0 build/uart_pl011.o
+ .data          0x000000008008f874       0x3c build/vm.o
+ *.c.o(*)
+
+.igot.plt       0x000000008008f8b0        0x0 load address 0x000000000008f8b0
+ .igot.plt      0x000000008008f8b0        0x0 build/entry.o
+
+.bss            0x000000008008f8b0     0x545c load address 0x000000000008f8b0
+ *(.bss)
+ .bss           0x000000008008f8b0        0x0 build/entry.o
+ .bss           0x000000008008f8b0        0x0 build/exception.o
+ .bss           0x000000008008f8b0        0x0 build/bio.o
+ .bss           0x000000008008f8b0       0x6c build/console.o
+                0x000000008008f8b0                fbinfo
+                0x000000008008f8d8                cursor_x
+                0x000000008008f8dc                cursor_y
+ .bss           0x000000008008f91c        0x0 build/exec.o
+ .bss           0x000000008008f91c        0x0 build/file.o
+ .bss           0x000000008008f91c        0x0 build/fs.o
+ .bss           0x000000008008f91c        0x0 build/kalloc.o
+ .bss           0x000000008008f91c        0x0 build/log.o
+ .bss           0x000000008008f91c        0x0 build/mailbox.o
+ .bss           0x000000008008f91c        0x0 build/main.o
+ .bss           0x000000008008f91c        0x8 build/memide.o
+ .bss           0x000000008008f924        0x0 build/mmu.o
+ .bss           0x000000008008f924        0x0 build/pipe.o
+ .bss           0x000000008008f924        0x4 build/proc.o
+ .bss           0x000000008008f928        0x0 build/spinlock.o
+ .bss           0x000000008008f928        0x0 build/string.o
+ .bss           0x000000008008f928        0x0 build/syscall.o
+ .bss           0x000000008008f928        0x0 build/sysfile.o
+ .bss           0x000000008008f928        0x0 build/sysproc.o
+ .bss           0x000000008008f928        0x0 build/timer.o
+ .bss           0x000000008008f928        0x0 build/trap.o
+ .bss           0x000000008008f928        0x0 build/uart.o
+ .bss           0x000000008008f928        0x0 build/uart_pl011.o
+ .bss           0x000000008008f928        0x0 build/vm.o
+ COMMON         0x000000008008f928     0x173c build/bio.o
+                0x000000008008f928                bcache
+ COMMON         0x0000000080091064      0x1a0 build/console.o
+                0x0000000080091064                input
+                0x0000000080091124                cpus
+ COMMON         0x0000000080091204      0x9e4 build/file.o
+                0x0000000080091204                ftable
+                0x0000000080091b98                devsw
+ COMMON         0x0000000080091be8      0xfd4 build/fs.o
+                0x0000000080091be8                icache
+ COMMON         0x0000000080092bbc       0x3c build/kalloc.o
+                0x0000000080092bbc                kmem
+ COMMON         0x0000000080092bf8       0x70 build/log.o
+                0x0000000080092bf8                log
+ COMMON         0x0000000080092c68        0x4 build/mailbox.o
+                0x0000000080092c68                mailbuffer
+ COMMON         0x0000000080092c6c       0x28 build/main.o
+                0x0000000080092c6c                mb_data
+ COMMON         0x0000000080092c94        0x4 build/mmu.o
+                0x0000000080092c94                pm_size
+ COMMON         0x0000000080092c98     0x2034 build/proc.o
+                0x0000000080092c98                ptable
+ COMMON         0x0000000080094ccc       0x38 build/trap.o
+                0x0000000080094ccc                tickslock
+                0x0000000080094d00                ticks
+ COMMON         0x0000000080094d04        0x4 build/uart_pl011.o
+                0x0000000080094d04                uart_lock
+ COMMON         0x0000000080094d08        0x4 build/vm.o
+                0x0000000080094d08                kpgdir
+                0x0000000080094d0c                PROVIDE (end, .)
+
+/DISCARD/
+ *(.eh_frame .note.GNU-stack)
+OUTPUT(build/kernel.elf elf32-littlearm)
+
+.ARM.attributes
+                0x0000000000000000       0x3b
+ .ARM.attributes
+                0x0000000000000000       0x29 build/entry.o
+ .ARM.attributes
+                0x0000000000000029       0x29 build/exception.o
+ .ARM.attributes
+                0x0000000000000052       0x3f build/bio.o
+ .ARM.attributes
+                0x0000000000000091       0x3f build/console.o
+ .ARM.attributes
+                0x00000000000000d0       0x3f build/exec.o
+ .ARM.attributes
+                0x000000000000010f       0x3f build/file.o
+ .ARM.attributes
+                0x000000000000014e       0x3f build/fs.o
+ .ARM.attributes
+                0x000000000000018d       0x3f build/kalloc.o
+ .ARM.attributes
+                0x00000000000001cc       0x3f build/log.o
+ .ARM.attributes
+                0x000000000000020b       0x3f build/mailbox.o
+ .ARM.attributes
+                0x000000000000024a       0x3f build/main.o
+ .ARM.attributes
+                0x0000000000000289       0x3f build/memide.o
+ .ARM.attributes
+                0x00000000000002c8       0x3f build/mmu.o
+ .ARM.attributes
+                0x0000000000000307       0x3f build/pipe.o
+ .ARM.attributes
+                0x0000000000000346       0x3f build/proc.o
+ .ARM.attributes
+                0x0000000000000385       0x3f build/spinlock.o
+ .ARM.attributes
+                0x00000000000003c4       0x3f build/string.o
+ .ARM.attributes
+                0x0000000000000403       0x3f build/syscall.o
+ .ARM.attributes
+                0x0000000000000442       0x3f build/sysfile.o
+ .ARM.attributes
+                0x0000000000000481       0x3f build/sysproc.o
+ .ARM.attributes
+                0x00000000000004c0       0x3f build/timer.o
+ .ARM.attributes
+                0x00000000000004ff       0x3f build/trap.o
+ .ARM.attributes
+                0x000000000000053e       0x3f build/uart.o
+ .ARM.attributes
+                0x000000000000057d       0x3f build/uart_pl011.o
+ .ARM.attributes
+                0x00000000000005bc       0x3f build/vm.o
+
+.comment        0x0000000000000000       0x7e
+ .comment       0x0000000000000000       0x7e build/bio.o
+                                         0x7f (size before relaxing)
+ .comment       0x000000000000007e       0x7f build/console.o
+ .comment       0x000000000000007e       0x7f build/exec.o
+ .comment       0x000000000000007e       0x7f build/file.o
+ .comment       0x000000000000007e       0x7f build/fs.o
+ .comment       0x000000000000007e       0x7f build/kalloc.o
+ .comment       0x000000000000007e       0x7f build/log.o
+ .comment       0x000000000000007e       0x7f build/mailbox.o
+ .comment       0x000000000000007e       0x7f build/main.o
+ .comment       0x000000000000007e       0x7f build/memide.o
+ .comment       0x000000000000007e       0x7f build/mmu.o
+ .comment       0x000000000000007e       0x7f build/pipe.o
+ .comment       0x000000000000007e       0x7f build/proc.o
+ .comment       0x000000000000007e       0x7f build/spinlock.o
+ .comment       0x000000000000007e       0x7f build/string.o
+ .comment       0x000000000000007e       0x7f build/syscall.o
+ .comment       0x000000000000007e       0x7f build/sysfile.o
+ .comment       0x000000000000007e       0x7f build/sysproc.o
+ .comment       0x000000000000007e       0x7f build/timer.o
+ .comment       0x000000000000007e       0x7f build/trap.o
+ .comment       0x000000000000007e       0x7f build/uart.o
+ .comment       0x000000000000007e       0x7f build/uart_pl011.o
+ .comment       0x000000000000007e       0x7f build/vm.o
+
+.debug_line     0x0000000000000000     0x218b
+ .debug_line    0x0000000000000000       0xfb build/entry.o
+ .debug_line    0x00000000000000fb       0xdd build/exception.o
+ .debug_line    0x00000000000001d8      0x104 build/bio.o
+ .debug_line    0x00000000000002dc      0x37a build/console.o
+ .debug_line    0x0000000000000656      0x103 build/exec.o
+ .debug_line    0x0000000000000759      0x110 build/file.o
+ .debug_line    0x0000000000000869      0x39d build/fs.o
+ .debug_line    0x0000000000000c06      0x113 build/kalloc.o
+ .debug_line    0x0000000000000d19      0x130 build/log.o
+ .debug_line    0x0000000000000e49       0xf9 build/mailbox.o
+ .debug_line    0x0000000000000f42       0xf2 build/main.o
+ .debug_line    0x0000000000001034       0xa4 build/memide.o
+ .debug_line    0x00000000000010d8       0xf4 build/mmu.o
+ .debug_line    0x00000000000011cc      0x136 build/pipe.o
+ .debug_line    0x0000000000001302      0x24e build/proc.o
+ .debug_line    0x0000000000001550       0xc0 build/spinlock.o
+ .debug_line    0x0000000000001610       0xed build/string.o
+ .debug_line    0x00000000000016fd       0xf1 build/syscall.o
+ .debug_line    0x00000000000017ee      0x2c6 build/sysfile.o
+ .debug_line    0x0000000000001ab4       0xe5 build/sysproc.o
+ .debug_line    0x0000000000001b99       0xe1 build/timer.o
+ .debug_line    0x0000000000001c7a      0x12c build/trap.o
+ .debug_line    0x0000000000001da6      0x13c build/uart.o
+ .debug_line    0x0000000000001ee2       0x8a build/uart_pl011.o
+ .debug_line    0x0000000000001f6c      0x21f build/vm.o
+
+.debug_info     0x0000000000000000     0xda77
+ .debug_info    0x0000000000000000       0x22 build/entry.o
+ .debug_info    0x0000000000000022       0x26 build/exception.o
+ .debug_info    0x0000000000000048      0x458 build/bio.o
+ .debug_info    0x00000000000004a0     0x1464 build/console.o
+ .debug_info    0x0000000000001904      0x8a4 build/exec.o
+ .debug_info    0x00000000000021a8      0x73c build/file.o
+ .debug_info    0x00000000000028e4     0x1b1f build/fs.o
+ .debug_info    0x0000000000004403      0x432 build/kalloc.o
+ .debug_info    0x0000000000004835      0x678 build/log.o
+ .debug_info    0x0000000000004ead      0x840 build/mailbox.o
+ .debug_info    0x00000000000056ed      0x932 build/main.o
+ .debug_info    0x000000000000601f      0x5e2 build/memide.o
+ .debug_info    0x0000000000006601      0x178 build/mmu.o
+ .debug_info    0x0000000000006779      0x822 build/pipe.o
+ .debug_info    0x0000000000006f9b      0xe3e build/proc.o
+ .debug_info    0x0000000000007dd9      0x6af build/spinlock.o
+ .debug_info    0x0000000000008488      0x4c4 build/string.o
+ .debug_info    0x000000000000894c      0x6eb build/syscall.o
+ .debug_info    0x0000000000009037     0x18b4 build/sysfile.o
+ .debug_info    0x000000000000a8eb      0x7a7 build/sysproc.o
+ .debug_info    0x000000000000b092      0x6b6 build/timer.o
+ .debug_info    0x000000000000b748      0x969 build/trap.o
+ .debug_info    0x000000000000c0b1      0x76d build/uart.o
+ .debug_info    0x000000000000c81e       0xc0 build/uart_pl011.o
+ .debug_info    0x000000000000c8de     0x1199 build/vm.o
+
+.debug_abbrev   0x0000000000000000     0x33a4
+ .debug_abbrev  0x0000000000000000       0x12 build/entry.o
+ .debug_abbrev  0x0000000000000012       0x14 build/exception.o
+ .debug_abbrev  0x0000000000000026      0x1fe build/bio.o
+ .debug_abbrev  0x0000000000000224      0x42e build/console.o
+ .debug_abbrev  0x0000000000000652      0x195 build/exec.o
+ .debug_abbrev  0x00000000000007e7      0x1ea build/file.o
+ .debug_abbrev  0x00000000000009d1      0x45c build/fs.o
+ .debug_abbrev  0x0000000000000e2d      0x25a build/kalloc.o
+ .debug_abbrev  0x0000000000001087      0x1e9 build/log.o
+ .debug_abbrev  0x0000000000001270      0x27c build/mailbox.o
+ .debug_abbrev  0x00000000000014ec      0x1cf build/main.o
+ .debug_abbrev  0x00000000000016bb      0x1a5 build/memide.o
+ .debug_abbrev  0x0000000000001860       0xd0 build/mmu.o
+ .debug_abbrev  0x0000000000001930      0x1fc build/pipe.o
+ .debug_abbrev  0x0000000000001b2c      0x391 build/proc.o
+ .debug_abbrev  0x0000000000001ebd      0x21d build/spinlock.o
+ .debug_abbrev  0x00000000000020da      0x1a1 build/string.o
+ .debug_abbrev  0x000000000000227b      0x259 build/syscall.o
+ .debug_abbrev  0x00000000000024d4      0x2eb build/sysfile.o
+ .debug_abbrev  0x00000000000027bf      0x17a build/sysproc.o
+ .debug_abbrev  0x0000000000002939      0x210 build/timer.o
+ .debug_abbrev  0x0000000000002b49      0x1bd build/trap.o
+ .debug_abbrev  0x0000000000002d06      0x250 build/uart.o
+ .debug_abbrev  0x0000000000002f56       0xae build/uart_pl011.o
+ .debug_abbrev  0x0000000000003004      0x3a0 build/vm.o
+
+.debug_aranges  0x0000000000000000      0x328
+ .debug_aranges
+                0x0000000000000000       0x28 build/entry.o
+ .debug_aranges
+                0x0000000000000028       0x20 build/exception.o
+ .debug_aranges
+                0x0000000000000048       0x20 build/bio.o
+ .debug_aranges
+                0x0000000000000068       0x20 build/console.o
+ .debug_aranges
+                0x0000000000000088       0x20 build/exec.o
+ .debug_aranges
+                0x00000000000000a8       0x20 build/file.o
+ .debug_aranges
+                0x00000000000000c8       0x20 build/fs.o
+ .debug_aranges
+                0x00000000000000e8       0x20 build/kalloc.o
+ .debug_aranges
+                0x0000000000000108       0x20 build/log.o
+ .debug_aranges
+                0x0000000000000128       0x20 build/mailbox.o
+ .debug_aranges
+                0x0000000000000148       0x20 build/main.o
+ .debug_aranges
+                0x0000000000000168       0x20 build/memide.o
+ .debug_aranges
+                0x0000000000000188       0x20 build/mmu.o
+ .debug_aranges
+                0x00000000000001a8       0x20 build/pipe.o
+ .debug_aranges
+                0x00000000000001c8       0x20 build/proc.o
+ .debug_aranges
+                0x00000000000001e8       0x20 build/spinlock.o
+ .debug_aranges
+                0x0000000000000208       0x20 build/string.o
+ .debug_aranges
+                0x0000000000000228       0x20 build/syscall.o
+ .debug_aranges
+                0x0000000000000248       0x20 build/sysfile.o
+ .debug_aranges
+                0x0000000000000268       0x20 build/sysproc.o
+ .debug_aranges
+                0x0000000000000288       0x20 build/timer.o
+ .debug_aranges
+                0x00000000000002a8       0x20 build/trap.o
+ .debug_aranges
+                0x00000000000002c8       0x20 build/uart.o
+ .debug_aranges
+                0x00000000000002e8       0x20 build/uart_pl011.o
+ .debug_aranges
+                0x0000000000000308       0x20 build/vm.o
+
+.debug_str      0x0000000000000000      0xf44
+ .debug_str     0x0000000000000000       0x61 build/entry.o
+ .debug_str     0x0000000000000061       0x13 build/exception.o
+                                         0x65 (size before relaxing)
+ .debug_str     0x0000000000000074      0x179 build/bio.o
+                                        0x1ee (size before relaxing)
+ .debug_str     0x00000000000001ed      0x2c1 build/console.o
+                                        0x4c5 (size before relaxing)
+ .debug_str     0x00000000000004ae      0x117 build/exec.o
+                                        0x351 (size before relaxing)
+ .debug_str     0x00000000000005c5       0x9e build/file.o
+                                        0x2b5 (size before relaxing)
+ .debug_str     0x0000000000000663       0xda build/fs.o
+                                        0x415 (size before relaxing)
+ .debug_str     0x000000000000073d       0x6f build/kalloc.o
+                                        0x1ea (size before relaxing)
+ .debug_str     0x00000000000007ac       0x67 build/log.o
+                                        0x28d (size before relaxing)
+ .debug_str     0x0000000000000813       0x77 build/mailbox.o
+                                        0x341 (size before relaxing)
+ .debug_str     0x000000000000088a       0xa6 build/main.o
+                                        0x358 (size before relaxing)
+ .debug_str     0x0000000000000930       0x51 build/memide.o
+                                        0x2ac (size before relaxing)
+ .debug_str     0x0000000000000981       0x2a build/mmu.o
+                                        0x184 (size before relaxing)
+ .debug_str     0x00000000000009ab       0x38 build/pipe.o
+                                        0x331 (size before relaxing)
+ .debug_str     0x00000000000009e3       0xff build/proc.o
+                                        0x3f2 (size before relaxing)
+ .debug_str     0x0000000000000ae2       0x21 build/spinlock.o
+                                        0x288 (size before relaxing)
+ .debug_str     0x0000000000000b03       0x27 build/string.o
+                                        0x185 (size before relaxing)
+ .debug_str     0x0000000000000b2a       0x52 build/syscall.o
+                                        0x27a (size before relaxing)
+ .debug_str     0x0000000000000b7c      0x119 build/sysfile.o
+                                        0x4cf (size before relaxing)
+ .debug_str     0x0000000000000c95       0x90 build/sysproc.o
+                                        0x2f6 (size before relaxing)
+ .debug_str     0x0000000000000d25       0x8c build/timer.o
+                                        0x2d0 (size before relaxing)
+ .debug_str     0x0000000000000db1       0x7a build/trap.o
+                                        0x348 (size before relaxing)
+ .debug_str     0x0000000000000e2b       0x39 build/uart.o
+                                        0x223 (size before relaxing)
+ .debug_str     0x0000000000000e64       0x45 build/uart_pl011.o
+                                        0x17f (size before relaxing)
+ .debug_str     0x0000000000000ea9       0x9b build/vm.o
+                                        0x3b0 (size before relaxing)
+
+.debug_ranges   0x0000000000000000      0x570
+ .debug_ranges  0x0000000000000000       0x20 build/entry.o
+ .debug_ranges  0x0000000000000020       0x20 build/bio.o
+ .debug_ranges  0x0000000000000040       0x90 build/console.o
+ .debug_ranges  0x00000000000000d0       0x40 build/file.o
+ .debug_ranges  0x0000000000000110       0xd8 build/fs.o
+ .debug_ranges  0x00000000000001e8       0x50 build/kalloc.o
+ .debug_ranges  0x0000000000000238       0x48 build/log.o
+ .debug_ranges  0x0000000000000280       0x40 build/mailbox.o
+ .debug_ranges  0x00000000000002c0       0x18 build/main.o
+ .debug_ranges  0x00000000000002d8       0x50 build/proc.o
+ .debug_ranges  0x0000000000000328       0x18 build/string.o
+ .debug_ranges  0x0000000000000340       0x80 build/syscall.o
+ .debug_ranges  0x00000000000003c0       0x98 build/sysfile.o
+ .debug_ranges  0x0000000000000458       0x98 build/timer.o
+ .debug_ranges  0x00000000000004f0       0x30 build/uart.o
+ .debug_ranges  0x0000000000000520       0x50 build/vm.o
+
+.debug_loc      0x0000000000000000     0x5ceb
+ .debug_loc     0x0000000000000000      0x149 build/bio.o
+ .debug_loc     0x0000000000000149      0x919 build/console.o
+ .debug_loc     0x0000000000000a62      0x2cc build/exec.o
+ .debug_loc     0x0000000000000d2e      0x4c3 build/file.o
+ .debug_loc     0x00000000000011f1     0x10db build/fs.o
+ .debug_loc     0x00000000000022cc      0x2cc build/kalloc.o
+ .debug_loc     0x0000000000002598      0x1cc build/log.o
+ .debug_loc     0x0000000000002764      0x2a1 build/mailbox.o
+ .debug_loc     0x0000000000002a05       0x9b build/memide.o
+ .debug_loc     0x0000000000002aa0      0x164 build/mmu.o
+ .debug_loc     0x0000000000002c04      0x29f build/pipe.o
+ .debug_loc     0x0000000000002ea3      0x473 build/proc.o
+ .debug_loc     0x0000000000003316       0xcb build/spinlock.o
+ .debug_loc     0x00000000000033e1      0x7e1 build/string.o
+ .debug_loc     0x0000000000003bc2      0x3a3 build/syscall.o
+ .debug_loc     0x0000000000003f65      0x7d6 build/sysfile.o
+ .debug_loc     0x000000000000473b       0xaf build/sysproc.o
+ .debug_loc     0x00000000000047ea      0x166 build/timer.o
+ .debug_loc     0x0000000000004950      0x19d build/trap.o
+ .debug_loc     0x0000000000004aed      0x40a build/uart.o
+ .debug_loc     0x0000000000004ef7      0xdf4 build/vm.o
+
+.debug_frame    0x0000000000000000     0x16c4
+ .debug_frame   0x0000000000000000       0x8c build/bio.o
+ .debug_frame   0x000000000000008c      0x21c build/console.o
+ .debug_frame   0x00000000000002a8       0x40 build/exec.o
+ .debug_frame   0x00000000000002e8      0x120 build/file.o
+ .debug_frame   0x0000000000000408      0x304 build/fs.o
+ .debug_frame   0x000000000000070c       0xb8 build/kalloc.o
+ .debug_frame   0x00000000000007c4       0xd4 build/log.o
+ .debug_frame   0x0000000000000898       0x68 build/mailbox.o
+ .debug_frame   0x0000000000000900       0x88 build/main.o
+ .debug_frame   0x0000000000000988       0x50 build/memide.o
+ .debug_frame   0x00000000000009d8       0x3c build/mmu.o
+ .debug_frame   0x0000000000000a14       0xa0 build/pipe.o
+ .debug_frame   0x0000000000000ab4      0x1c8 build/proc.o
+ .debug_frame   0x0000000000000c7c       0xb4 build/spinlock.o
+ .debug_frame   0x0000000000000d30       0xd0 build/string.o
+ .debug_frame   0x0000000000000e00       0x8c build/syscall.o
+ .debug_frame   0x0000000000000e8c      0x254 build/sysfile.o
+ .debug_frame   0x00000000000010e0      0x13c build/sysproc.o
+ .debug_frame   0x000000000000121c       0x64 build/timer.o
+ .debug_frame   0x0000000000001280       0xc8 build/trap.o
+ .debug_frame   0x0000000000001348       0xa8 build/uart.o
+ .debug_frame   0x00000000000013f0       0x40 build/uart_pl011.o
+ .debug_frame   0x0000000000001430      0x294 build/vm.o
