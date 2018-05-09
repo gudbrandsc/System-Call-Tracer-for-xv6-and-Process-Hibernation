@@ -55,10 +55,10 @@ sys_dup(void)
   struct file *f;
   int fd;
   argfd(0, 0, &f);
-  fd=fdalloc(f);
+  fd = fdalloc(f);
   
   if(curr_proc->trace == 1){
-    cprintf("[%d]sys_dup(%d)\n",fd);
+    cprintf("[%d]sys_dup(%d)\n", fd);
   }
 
   if(argfd(0, 0, &f) < 0){
@@ -84,10 +84,10 @@ sys_read(void)
   int ptr_status=argptr(1, &p, n);
 
  if(curr_proc->trace == 1){
-    if(*p =='\n'){
-      cprintf("[%d]sys_read(%d,\\n,%d)\n",curr_proc->pid,fd,n);
+    if(*p == '\n'){
+      cprintf("[%d]sys_read(%d,\\n,%d)\n",curr_proc->pid, fd, n);
     } else{
-      cprintf("[%d]sys_read(%d,%s,%d)\n",curr_proc->pid,fd,p,n);
+      cprintf("[%d]sys_read(%d,%s,%d)\n",curr_proc->pid, fd, p, n);
     }
   }
 
@@ -134,7 +134,7 @@ sys_close(void)
   int fd_status=argfd(0, &fd, &f);
 
   if(curr_proc->trace == 1){
-    cprintf("[%d]sys_close(%d)\n",curr_proc->pid,fd);
+    cprintf("[%d]sys_close(%d)\n",curr_proc->pid, fd);
   }
 
   if(fd_status < 0)
@@ -150,11 +150,11 @@ sys_fstat(void)
   struct file *f;
   struct stat *st;
   int fd;
-  int fd_status=argfd(0, &fd, &f);
-  int ptr_status=argptr(1, (void*)&st, sizeof(*st));
+  int fd_status = argfd(0, &fd, &f);
+  int ptr_status = argptr(1, (void*)&st, sizeof(*st));
 
   if(curr_proc->trace == 1){
-    cprintf("[%d]sys_fstat(%d)\n",curr_proc->pid,fd);
+    cprintf("[%d]sys_fstat(%d)\n",curr_proc->pid, fd);
   }
 
   if(fd_status < 0 || ptr_status < 0)
@@ -169,11 +169,11 @@ sys_link(void)
 
   char name[DIRSIZ], *new, *old;
   struct inode *dp, *ip;
-  int argstr0_status=argstr(0, &old);
-  int argstr1_status=argstr(1, &new);
+  int argstr0_status = argstr(0, &old);
+  int argstr1_status = argstr(1, &new);
 
   if(curr_proc->trace == 1){
-    cprintf("[%d]sys_link(%s,%s)\n",curr_proc->pid,old,new);
+    cprintf("[%d]sys_link(%s,%s)\n", curr_proc->pid, old, new);
   }
 
   if(argstr0_status < 0 || argstr1_status  < 0){
@@ -244,11 +244,11 @@ sys_unlink(void)
   struct dirent de;
   char name[DIRSIZ], *path;
   uint off;
-  int argstr_status=argstr(0, &path);
+  int argstr_status = argstr(0, &path);
   dp = nameiparent(path, name);
 
   if(curr_proc->trace == 1){
-    cprintf("[%d]sys_unlink(%s)\n",curr_proc->pid,name);
+    cprintf("[%d]sys_unlink(%s)\n",curr_proc->pid, name);
   }
 
   if(argstr_status < 0)
@@ -355,7 +355,7 @@ sys_open(void)
   int argsint_status=argint(1, &omode);
 
   if(curr_proc->trace == 1){
-    cprintf("[%d]sys_open(%s,%d)\n",curr_proc->pid,path,omode);
+    cprintf("[%d]sys_open(%s,%d)\n",curr_proc->pid, path, omode);
   }
 
   if(argstr_status < 0 || argsint_status < 0)
@@ -400,7 +400,7 @@ sys_mkdir(void)
   int argstr_status=argstr(0, &path);
   
   if(curr_proc->trace == 1){
-    cprintf("[%d]sys_mkdir(%s)\n",curr_proc->pid,path);
+    cprintf("[%d]sys_mkdir(%s)\n",curr_proc->pid, path);
   }
 
   begin_trans();
@@ -425,7 +425,7 @@ sys_mknod(void)
     argstr(0, &path);
     argint(1, &major);
     argint(2, &minor);
-    cprintf("[%d]sys_mknod(%s,%d,%d)\n",curr_proc->pid,path,major,minor);
+    cprintf("[%d]sys_mknod(%s,%d,%d)\n", curr_proc->pid, path, major, minor);
   }
 
   begin_trans();
@@ -449,7 +449,7 @@ sys_chdir(void)
   int argstr_status=argstr(0, &path);
   ip = namei(path);
   if(curr_proc->trace == 1){
-    cprintf("[%d]sys_chdir(%s)\n",curr_proc->pid,path);
+    cprintf("[%d]sys_chdir(%s)\n", curr_proc->pid, path);
   }
 
   if(argstr_status < 0 || ip == 0)
@@ -475,7 +475,7 @@ sys_exec(void)
   int argsint_status=argint(1, (int*)&uargv);
   
   if(curr_proc->trace == 1){
-    cprintf("[%d]sys_exec(%s,%p)\n",curr_proc->pid,path,argv);
+    cprintf("[%d]sys_exec(%s,%p)\n", curr_proc->pid, path, argv);
   }
 
   if(argstr_status < 0 || argsint_status < 0){
@@ -506,7 +506,7 @@ sys_pipe(void)
   int argptr_status=argptr(0, (void*)&fd, 2*sizeof(fd[0]));
   int pipealloc_status=pipealloc(&rf, &wf);;
   if(curr_proc->trace == 1){
-    cprintf("[%d]sys_pipe([%d,%d])\n",curr_proc->pid,fd0,fd1);
+    cprintf("[%d]sys_pipe([%d,%d])\n", curr_proc->pid, fd0,fd1);
   }
 
   if(argptr_status < 0)

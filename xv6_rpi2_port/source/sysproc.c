@@ -10,7 +10,7 @@ int
 sys_fork(void)
 {
   if(curr_proc->trace == 1){
-    cprintf("[%d]sys_fork()\n",curr_proc->pid);
+    cprintf("[%d]sys_fork()\n", curr_proc->pid);
   }
   return fork();
 }
@@ -19,7 +19,7 @@ int
 sys_exit(void)
 {
   if(curr_proc->trace == 1){
-    cprintf("[%d]sys_exit()\n",curr_proc->pid);
+    cprintf("[%d]sys_exit()\n", curr_proc->pid);
   }
   exit();
   return 0;  // not reached
@@ -29,7 +29,7 @@ int
 sys_wait(void)
 {
   if(curr_proc->trace == 1){
-    cprintf("[%d]sys_wait()\n",curr_proc->pid);
+    cprintf("[%d]sys_wait()\n", curr_proc->pid);
   }
   return wait();
 }
@@ -41,7 +41,7 @@ sys_kill(void)
   int argint_status=argint(0, &pid);
 
   if(curr_proc->trace == 1){  
-    cprintf("[%d]sys_kill(%d)\n",curr_proc->pid, pid);
+    cprintf("[%d]sys_kill(%d)\n", curr_proc->pid, pid);
   }
 
   if(argint_status < 0)
@@ -53,7 +53,7 @@ int
 sys_getpid(void)
 {
   if(curr_proc->trace == 1){
-    cprintf("[%d]sys_getpid()\n",curr_proc->pid);
+    cprintf("[%d]sys_getpid()\n", curr_proc->pid);
   }
   return curr_proc->pid;
 }
@@ -66,7 +66,7 @@ sys_sbrk(void)
   int argint_status=argint(0, &n);
 
   if(curr_proc->trace == 1){
-    cprintf("[%d]sys_sbrk(%d)\n",curr_proc->pid,n);
+    cprintf("[%d]sys_sbrk(%d)\n", curr_proc->pid, n);
   }
   if(argint_status < 0)
     return -1;
@@ -86,7 +86,7 @@ sys_sleep(void)
   int argint_status=argint(0, &n);
 
   if(curr_proc->trace == 1){
-    cprintf("[%d]sys_sleep(%d)\n",curr_proc->pid,ticks0);
+    cprintf("[%d]sys_sleep(%d)\n", curr_proc->pid, ticks0);
   }
 
   if(argint_status < 0)
@@ -119,7 +119,7 @@ int
 sys_memfree(void) 
 { 
   if(curr_proc->trace == 1){
-    cprintf("[%d]sys_memfree()\n",curr_proc->pid);
+    cprintf("[%d]sys_memfree()\n", curr_proc->pid);
   }
   return kmemfree(); 
 }
@@ -128,7 +128,7 @@ int
 sys_trace(void) 
 { 
   if(curr_proc->trace == 1){
-    cprintf("[%d]sys_trace()\n",curr_proc->pid);
+    cprintf("[%d]sys_trace()\n", curr_proc->pid);
   }
   return trace(); 
 }

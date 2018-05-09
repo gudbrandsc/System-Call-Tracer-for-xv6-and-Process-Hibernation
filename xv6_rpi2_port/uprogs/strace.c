@@ -5,24 +5,22 @@
 int 
 main(int argc, char *argv[]) 
 { 
-	trace();
-	char s[7];
+	char s[64];
+  int id;
+
 	strcpy(s,argv[1]);
 	argv++;
-/*    id = fork();
+  id = fork();
 
 	
     if (id == 0) { 
-        we are in the child */ 
-       exec(s, argv); 
-       printf(1, "Child: WE DON'T SEE THIS\n"); 
-       exit();
-        
-   /* } else { 
-         we are in the parent  
-       id = wait(); 
-       printf(1, "Parent: child terminated\n"); 
+      trace();
+      exec(s, argv); 
+      printf(1, "Child: WE DON'T SEE THIS\n"); 
+      exit();  
+    } else { 
+      id = wait(); 
+      printf(1, "Parent: child terminated\n"); 
     } 
-
-    exit(); */
+    exit(); 
 }
